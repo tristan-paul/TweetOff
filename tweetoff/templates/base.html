@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TwitOff - {{ title }}</title>
+    <title>TweetOff - {{ title }}</title>
     <link rel="stylesheet" href="https://unpkg.com/picnic"/>
   </head>
   <body>
     <nav>
-      <a href="/" class="brand"><span>TwitOff!</span></a>
+      <a href="/" class="brand"><span>Welcome to the TweetOff!</span></a>
 
       <!-- responsive-->
       <input id="bmenub" type="checkbox" class="show">
@@ -17,16 +17,52 @@
         <a href="/reset" class="button error">Reset Database</a>
       </div>
     </nav>
+
+
     <article class="flex two" style="padding: 3em 1em;">
+      {% block content %}
       <div>
         <h1>{{ title }}</h1>
+        <form action="/compare" method="post">
+            <select name="user1">
+                {% for user in users %}
+                <option value="{{ user.name }}">{{user.name}}</option>
+                {% endfor %}
+                </select>
+
+            <select name="user2">
+                {% for user in users %}
+                <option value="{{user.name}}">{{user.name}}</option>
+                {% endfor %}
+                </select>
+                <input type="text" name="tweet_text" placeholder="Tweet text to predict">
+                <input type="submit" value="Compare Users">
+                </form>
+                <p>
+                    Want to understand at a glance which of two similar political writers is more likely to talk about your favorite issue? With Tweetoff, select two Twitter users, type a hypothetical text and sit back as the backend predicts who was more likely to type that.
+                </p>
       </div>
+
+
       <div>
         <h2>Users</h2>
         {% for user in users %}
-        {{ user.name }}
         <a href="/user/{{ user.name }}"><span class="stack">{{ user.name }}</span></a>
         {% endfor %}
+        <form action="/user" method="post">
+            <input type="text" name="user_name" placeholder="User to add">
+            <input type="submit" value="Add User">
+        </form>
+        <p>
+            Type in a Twitter handle (the @user but without the @) into 'User to add'. We access the Twitter API to retrieve the user's tweet timeline, so please expect waittimes. New users may not be selectable until you push 'Welcome' again.
+        </p>
+        <p>
+            The default userbase is based on who I follow that actively write original tweets (no rts are recognized by app). This is a lot of CEOS, journalists and general thought leaders.
+        </p>
+        <p>
+            And the Dinosaur Comics guy.
+        </p>
+        {% endblock %}
       </div>
     </article>
   </body>
